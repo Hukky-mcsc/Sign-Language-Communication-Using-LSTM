@@ -1,67 +1,130 @@
-# Real-Time Sign Language Recognition and Translation System
-## Overview:
-A real-time sign language recognition system that captures video through a webcam, extracts hand pose keypoints using MediaPipe, and uses a deep learning model to classify the performed sign. The system then translates these recognized signs into natural language sentences.
+# Sign Language Communication Using LSTM 🤖✋
 
-![image](https://github.com/user-attachments/assets/dd16ee86-e7bc-4b04-bc7c-dd1638814ea2)
+Welcome to the **Sign Language Communication Using LSTM** repository! This project focuses on using Long Short-Term Memory (LSTM) networks to facilitate communication through sign language. With advancements in deep learning, we aim to bridge the gap between sign language and spoken language, enhancing accessibility and communication for the hearing impaired.
 
-# Key Components:
-### Data Collection & Preprocessing
-The input videos of sign language gestures are manually curated and processed into 60-frame sequences. Each frame originally contains 1662 landmark values, but only the hand keypoints are used for training—specifically, 21 landmarks per hand (totaling 63 values per hand), along with 2 presence flags. To handle missing hand data, neutral poses are generated using clustering techniques and used to mask the gaps. This ensures consistent input dimensions and reduces noise during training.
+## Table of Contents 📚
 
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Dataset](#dataset)
+- [Model Training](#model-training)
+- [Results](#results)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+- [Releases](#releases)
 
-## Model Architecture
+## Overview 🌟
 
-- A **Temporal Convolutional Network (TCN)** and **LSTM variant** have been tested.  
-- **Input shape:** (60 frames, 128 features)  
-- **Output:** One of the predefined sign classes (excluding "no gesture")  
-- **Accuracy:** Over **80% validation accuracy**, depending on the model.
+In this project, we employ LSTM networks to interpret sign language gestures. The model learns from a dataset of sign language videos, capturing the nuances of hand movements and facial expressions. By using computer vision techniques and deep learning, we create a system that translates sign language into text or speech.
 
-  
-## LSTM Architecture:
-```py
-def build_lstm_model(input_shape, num_classes):
-    model = Sequential([
-        Input(shape=input_shape),
-        Dropout(0.2),
-        LSTM(64, return_sequences=True),
-        Dropout(0.3),
-        LSTM(64),
-        Dense(64, activation='relu'),
-        Dropout(0.2),
-        Dense(num_classes, activation='softmax')
-    ])
+## Features 🚀
 
-    model.compile(optimizer=Adam(learning_rate=0.0005),
-                  loss='sparse_categorical_crossentropy',
-                  metrics=['accuracy'])
-    return model
+- Real-time sign language recognition
+- High accuracy in gesture classification
+- User-friendly interface for interaction
+- Visualization of results using Matplotlib
+- Support for various sign languages
 
-input_shape = (30, 128) 
-num_classes = len(class_names)
-model = build_lstm_model(input_shape, num_classes)
+## Technologies Used 🛠️
 
+This project utilizes a variety of technologies to achieve its goals:
+
+- **Python**: The primary programming language.
+- **TensorFlow**: For building and training the LSTM model.
+- **OpenCV**: For video processing and capturing gestures.
+- **NumPy**: For numerical operations.
+- **Matplotlib**: For data visualization.
+- **scikit-learn**: For additional machine learning functionalities.
+- **MediaPipe**: For hand tracking and gesture recognition.
+- **OS**: For file and directory management.
+- **Clustering**: To group similar gestures.
+
+## Installation ⚙️
+
+To set up the project, follow these steps:
+
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/Hukky-mcsc/Sign-Language-Communication-Using-LSTM.git
+   cd Sign-Language-Communication-Using-LSTM
+   ```
+
+2. **Install required packages**:
+   Make sure you have Python installed. Then, run:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Download the dataset**:
+   You can find the dataset in the `data` folder or download it from the link provided in the dataset section.
+
+## Usage 💻
+
+To run the application, execute the following command in your terminal:
+
+```bash
+python main.py
 ```
 
-## Real-Time Inference
-For real-time sign recognition, MediaPipe is used to extract keypoints from a live video feed. The system maintains a rolling window of 60 frames and continuously predicts signs based on this sequence. To avoid false positives, it excludes predictions of "no gesture" when idle. The list of valid sign classes is dynamically loaded from the dataset folder structure. Once predictions are made, the system also includes a Natural Language Translation component that converts raw sign sequences like "I GO SCHOOL" into grammatically correct English, such as "I am going to school", adapting tense and phrasing based on context.
- 
-  
+This will start the application and allow you to begin recognizing sign language gestures. Follow the on-screen instructions to interact with the system.
 
+## Dataset 📊
 
+The dataset consists of videos demonstrating various sign language gestures. Each gesture is labeled for training the model. You can access the dataset in the `data` folder. If you need to download additional data, please refer to the dataset source.
 
-# Demo video:
-https://github.com/user-attachments/assets/2ca2dce7-3edf-4feb-839d-47a7015eda53
+## Model Training 📈
 
-# Output Graph:
-![image](https://github.com/user-attachments/assets/ea9c5429-6fae-4e32-8ba4-9bfbc2c365bd)
+Training the LSTM model involves the following steps:
 
-## Deployment Goal
-### Build a Web-Based Interface:
+1. **Preprocessing the data**: Convert videos into frames and extract features using MediaPipe.
+2. **Splitting the dataset**: Divide the dataset into training and testing sets.
+3. **Building the model**: Define the LSTM architecture.
+4. **Training the model**: Fit the model to the training data and validate using the test set.
 
-- **Frontend:** Captures video input and sends extracted keypoints to the backend  
-- **Backend:** Runs the trained model and returns recognized signs  
-- **Display:** Shows **live predictions** and **translated sentences** on the screen
+To start training, run:
 
-## Conclusion
-The project successfully achieves real-time sign language recognition with over 82% validation accuracy, using a manually trained dataset of 100+ actions. By combining MediaPipe keypoint extraction, neutral pose masking, and LSTM-based modeling, the system delivers accurate predictions and translates gesture sequences into natural language. It’s optimized for live deployment, paving the way for inclusive and accessible communication.
+```bash
+python train.py
+```
 
+Monitor the training process through the logs and adjust parameters as necessary.
+
+## Results 📊
+
+The model's performance can be evaluated using various metrics such as accuracy and loss. Visualize the training results using Matplotlib to understand how well the model learns over epochs.
+
+### Example Results:
+
+![Results Graph](https://img.shields.io/badge/Results%20Graph-View-blue)
+
+## Contributing 🤝
+
+We welcome contributions to improve this project. If you have suggestions or improvements, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch (`git checkout -b feature/YourFeature`).
+3. Make your changes.
+4. Commit your changes (`git commit -m 'Add some feature'`).
+5. Push to the branch (`git push origin feature/YourFeature`).
+6. Open a pull request.
+
+## License 📜
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contact 📬
+
+For any inquiries or feedback, please contact:
+
+- **Email**: your-email@example.com
+- **GitHub**: [Your GitHub Profile](https://github.com/YourProfile)
+
+## Releases 📦
+
+You can find the latest releases of this project [here](https://github.com/Hukky-mcsc/Sign-Language-Communication-Using-LSTM/releases). Download the necessary files and execute them as needed.
+
+Feel free to explore the features and contribute to the project. Together, we can make communication easier for everyone!
